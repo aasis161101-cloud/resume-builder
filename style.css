@@ -4,7 +4,15 @@
   margin: 0;
   padding: 0;
 }
-
+.site-footer {
+  margin-top: 50px;
+  padding: 25px;
+  text-align: center;
+  background-color: #f3f4f6;
+  font-size: 14px;
+  color: #6b7280;
+  border-top: 1px solid #e5e7eb;
+}
 :root {
   --navy:        #0f1f3d;
   --blue:        #1a56db;
