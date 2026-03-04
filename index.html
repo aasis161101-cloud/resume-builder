@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resumix – Build Your Professional Resume in Seconds</title>
+  <meta name="description" content="AI-powered resume builder. Create ATS-optimized, professional resumes in seconds. Free to use." />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ==================== LOADING OVERLAY ==================== -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Crafting Your Resume…</div>
+    <div class="loading-sub">AI is building your ATS-optimized resume</div>
+    <div class="loading-steps">
+      <div class="loading-step" id="step1"><div class="step-dot"></div>Analyzing your profile</div>
+      <div class="loading-step" id="step2"><div class="step-dot"></div>Writing professional summary</div>
+      <div class="loading-step" id="step3"><div class="step-dot"></div>Optimizing for ATS keywords</div>
+      <div class="loading-step" id="step4"><div class="step-dot"></div>Formatting resume sections</div>
+    </div>
+  </div>
+
+  <!-- ==================== TEMPLATE SELECTION PAGE ==================== -->
+  <div class="page" id="template-page">
+    <nav class="tpl-nav">
+      <div class="tpl-nav-logo">Resumix</div>
+      <button class="back-btn" onclick="showPage('landing')">← Back</button>
+    </nav>
+
+    <div class="tpl-container">
+      <div class="tpl-header">
+        <div class="step-badge">Step 1 of 2 &nbsp;·&nbsp; Choose Template</div>
+        <h1>Choose Your Resume Template</h1>
+        <p>Pick a design that matches your industry and personal style</p>
+      </div>
+
+      <div class="tpl-filters">
+        <button class="tpl-filter-btn active" onclick="filterTemplates('all', this)">All Templates</button>
+        <button class="tpl-filter-btn" onclick="filterTemplates('professional', this)">Professional</button>
+        <button class="tpl-filter-btn" onclick="filterTemplates('creative', this)">Creative</button>
+        <button class="tpl-filter-btn" onclick="filterTemplates('minimal', this)">Minimal</button>
+        <button class="tpl-filter-btn" onclick="filterTemplates('tech', this)">Tech</button>
+      </div>
+
+      <div class="tpl-grid" id="templateGrid"></div>
+
+      <div class="tpl-proceed-wrap">
+        <div id="proceedInfo" class="hidden">
+          <div class="tpl-selected-name" id="selectedTemplateName"></div>
+          <br />
+        </div>
+        <p id="proceedHint">Select a template above to continue</p>
+        <button class="btn-proceed" id="proceedBtn" disabled onclick="proceedToForm()">
+          Continue to Form →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LANDING PAGE ==================== -->
+  <div class="page active" id="landing">
+    <nav class="nav">
+      <div class="nav-logo">Resumix</div>
+      <button class="nav-cta" onclick="showPage('template-page')">Get Started Free →</button>
+    </nav>
+
+    <div class="hero">
+      <div class="hero-badge">✦ Powered by Claude AI</div>
+      <h1>Build Your Professional<br />Resume in <em>Seconds</em> with AI</h1>
+      <p class="hero-sub">ATS-optimized resumes crafted by AI. Land more interviews, faster. No design skills needed.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('template-page')">✦ Create Resume Now</button>
+        <button class="btn-secondary" onclick="showPage('template-page')">Browse Templates →</button>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-dots">
+          <div class="trust-dot">👤</div>
+          <div class="trust-dot">👤</div>
+          <div class="trust-dot">👤</div>
+          <div class="trust-dot">👤</div>
+          <div class="trust-dot">👤</div>
+        </div>
+        <span>Join 12,400+ professionals who got hired</span>
+      </div>
+      <div class="hero-visual">
+        <div class="mockup-bar">
+          <div class="mockup-dot"></div>
+          <div class="mockup-dot"></div>
+          <div class="mockup-dot"></div>
+          <div class="mockup-url">resumix.app/builder</div>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-form-col">
+            <div class="mockup-field">
+              <div class="mockup-field-label">Full Name</div>
+              <div class="mockup-field-val">Priya Sharma</div>
+            </div>
+            <div class="mockup-field">
+              <div class="mockup-field-label">Target Role</div>
+              <div class="mockup-field-val">Software Engineer</div>
+            </div>
+            <div class="mockup-field">
+              <div class="mockup-field-label">Skills</div>
+              <div class="mockup-field-val">React, Node.js, Python…</div>
+            </div>
+            <div class="mockup-field">
+              <div class="mockup-field-label">Experience</div>
+              <div class="mockup-field-val">2 years at TechCorp</div>
+            </div>
+          </div>
+          <div class="mockup-preview-col">
+            <div class="mockup-resume-name">Priya Sharma</div>
+            <div class="mockup-resume-title">Software Engineer</div>
+            <div class="mockup-section-header">Professional Summary</div>
+            <div class="mockup-resume-line"></div>
+            <div class="mockup-resume-line short"></div>
+            <div class="mockup-section-header">Skills</div>
+            <div class="mockup-resume-line shorter"></div>
+            <div class="mockup-resume-line short"></div>
+            <div class="mockup-section-header">Experience</div>
+            <div class="mockup-resume-line"></div>
+            <div class="mockup-resume-line short"></div>
+            <div class="mockup-resume-line shorter"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="features-header">
+        <h2>Everything you need to get hired</h2>
+        <p>Professional resumes built by AI in under 60 seconds</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>ATS-Optimized</h3>
+          <p>Beat applicant tracking systems with the right keywords and formatting recruiters want to see.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>60-Second Build</h3>
+          <p>Fill in your details, click generate. Your complete professional resume is ready instantly.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📄</div>
+          <h3>PDF Download</h3>
+          <p>Export your resume as a clean, print-ready PDF. Perfect formatting guaranteed every time.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✍️</div>
+          <h3>Strong Action Verbs</h3>
+          <p>AI rewrites your experience with powerful action verbs that make recruiters take notice.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3>All Industries</h3>
+          <p>From software engineering to marketing, finance to healthcare — works for every career.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>Edit Anytime</h3>
+          <p>Not happy with the output? Jump back to the form and regenerate in seconds.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-wrapper">
+      <div class="cta-section">
+        <h2>Your dream job is one resume away</h2>
+        <p>Create your ATS-optimized resume for free — no signup needed</p>
+        <button class="btn-primary btn-cta-large" onclick="showPage('template-page')">
+          Build My Resume Now →
+        </button>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Made with ❤️ using <strong>Claude AI</strong> • Resumix © 2025</p>
+    </div>
+  </div>
+
+  <!-- ==================== VOICE MODE PAGE ==================== -->
+  <div class="page" id="voice-page">
+    <div class="voice-stars" id="voiceStars"></div>
+
+    <nav class="voice-nav">
+      <div class="voice-nav-logo">
+        Resumix
+        <span class="voice-mode-label">VOICE MODE</span>
+      </div>
+      <button class="voice-back-btn" onclick="showPage('form-page')">← Manual Form</button>
+    </nav>
+
+    <div class="voice-container">
+      <div class="voice-header">
+        <div class="voice-badge">🎙️ &nbsp;AI Voice Recognition</div>
+        <h1>Just Speak,<br />We'll Build It</h1>
+        <p>Talk naturally about yourself — your name, skills, experience, education. AI will listen, understand, and fill your resume automatically.</p>
+      </div>
+
+      <div class="mic-area">
+        <div class="mic-rings">
+          <div class="mic-ring" id="ring1"></div>
+          <div class="mic-ring" id="ring2"></div>
+          <div class="mic-ring" id="ring3"></div>
+        </div>
+        <button class="mic-btn" id="micBtn" onclick="toggleRecording()" title="Click to speak">
+          <span id="micIcon">🎙️</span>
+        </button>
+      </div>
+
+      <div class="mic-status" id="micStatus">Click the mic to start speaking</div>
+
+      <div class="waveform" id="waveform">
+        <div class="wave-bar" style="--h:8px;  --speed:0.6s; --delay:0.00s"></div>
+        <div class="wave-bar" style="--h:20px; --speed:0.7s; --delay:0.05s"></div>
+        <div class="wave-bar" style="--h:32px; --speed:0.5s; --delay:0.10s"></div>
+        <div class="wave-bar" style="--h:24px; --speed:0.8s; --delay:0.15s"></div>
+        <div class="wave-bar" style="--h:36px; --speed:0.6s; --delay:0.20s"></div>
+        <div class="wave-bar" style="--h:28px; --speed:0.7s; --delay:0.25s"></div>
+        <div class="wave-bar" style="--h:40px; --speed:0.5s; --delay:0.30s"></div>
+        <div class="wave-bar" style="--h:32px; --speed:0.9s; --delay:0.35s"></div>
+        <div class="wave-bar" style="--h:20px; --speed:0.6s; --delay:0.40s"></div>
+        <div class="wave-bar" style="--h:36px; --speed:0.7s; --delay:0.45s"></div>
+        <div class="wave-bar" style="--h:28px; --speed:0.8s; --delay:0.50s"></div>
+        <div class="wave-bar" style="--h:14px; --speed:0.6s; --delay:0.55s"></div>
+        <div class="wave-bar" style="--h:22px; --speed:0.5s; --delay:0.60s"></div>
+        <div class="wave-bar" style="--h:38px; --speed:0.7s; --delay:0.65s"></div>
+        <div class="wave-bar" style="--h:16px; --speed:0.9s; --delay:0.70s"></div>
+        <div class="wave-bar" style="--h:30px; --speed:0.6s; --delay:0.75s"></div>
+        <div class="wave-bar" style="--h:10px; --speed:0.7s; --delay:0.80s"></div>
+        <div class="wave-bar" style="--h:26px; --speed:0.5s; --delay:0.85s"></div>
+      </div>
+
+      <div class="transcript-box" id="transcriptBox">
+        <div class="transcript-label">Live Transcript</div>
+        <div class="transcript-text placeholder" id="transcriptText">
+          Your words will appear here as you speak…
+        </div>
+      </div>
+
+      <div class="parsed-preview" id="parsedPreview">
+        <div class="parsed-preview-title">✦ &nbsp;AI Extracted Your Details</div>
+        <div class="parsed-fields" id="parsedFields"></div>
+      </div>
+
+      <div class="voice-tips">
+        <div class="voice-tip"><strong>💡 What to say</strong>"My name is Arjun Mehta, I'm a Software Engineer from Bangalore…"</div>
+        <div class="voice-tip"><strong>🎓 Education</strong>"I did B.Tech in CS from IIT Delhi, graduated in 2022 with 8.7 CGPA"</div>
+        <div class="voice-tip"><strong>💼 Experience</strong>"I worked at Infosys for 2 years as a backend developer, built REST APIs…"</div>
+        <div class="voice-tip"><strong>⚡ Skills</strong>"My skills include React, Node.js, Python, SQL and team leadership"</div>
+      </div>
+
+      <div class="voice-actions">
+        <button class="btn-voice-fill" id="voiceFillBtn" disabled onclick="fillFormFromVoice()">
+          ✦ Auto-Fill Resume Form
+        </button>
+        <button class="btn-voice-clear" onclick="clearVoice()">🗑 Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FORM PAGE ==================== -->
+  <div class="page" id="form-page">
+    <nav class="form-nav">
+      <div class="form-nav-logo">Resumix</div>
+      <button class="back-btn" onclick="showPage('template-page')">← Change Template</button>
+    </nav>
+
+    <div class="form-container">
+      <div class="form-header">
+        <h1>Build Your Resume</h1>
+        <p>Fill in your details below — AI will craft a professional resume in seconds</p>
+        <div id="formTemplateBadge"></div>
+      </div>
+
+      <div class="voice-entry-banner" onclick="showPage('voice-page')">
+        <div class="voice-entry-icon">🎙️</div>
+        <div class="voice-entry-text">
+          <h3>Try Voice Mode — Just Speak!</h3>
+          <p>Talk about yourself and AI will auto-fill this entire form for you instantly</p>
+        </div>
+        <div class="voice-entry-arrow">→</div>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <form id="resumeForm" novalidate>
+
+        <!-- PERSONAL INFO -->
+        <div class="form-card">
+          <div class="card-header">
+            <div class="card-icon">👤</div>
+            <div>
+              <h2>Personal Information</h2>
+              <p>Basic contact details for your resume header</p>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field" id="field-fullName">
+              <label>Full Name <span class="req">*</span></label>
+              <input type="text" id="fullName" placeholder="e.g. Priya Sharma" autocomplete="name" />
+              <span class="error-msg">Please enter your full name</span>
+            </div>
+            <div class="field" id="field-jobRole">
+              <label>Target Job Role <span class="req">*</span></label>
+              <input type="text" id="jobRole" placeholder="e.g. Software Engineer, Product Manager" />
+              <span class="error-msg">Please enter your target role</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field" id="field-email">
+              <label>Email Address <span class="req">*</span></label>
+              <input type="email" id="email" placeholder="priya@example.com" autocomplete="email" />
+              <span class="error-msg">Please enter a valid email</span>
+            </div>
+            <div class="field" id="field-phone">
+              <label>Phone Number <span class="req">*</span></label>
+              <input type="tel" id="phone" placeholder="+91 98765 43210" autocomplete="tel" />
+              <span class="error-msg">Please enter your phone number</span>
+            </div>
+          </div>
+          <div class="field" id="field-location">
+            <label>Location</label>
+            <input type="text" id="location" placeholder="e.g. Bangalore, India" />
+            <span class="hint">City, State or Remote</span>
+          </div>
+        </div>
+
+        <!-- EDUCATION -->
+        <div class="form-card">
+          <div class="card-header">
+            <div class="card-icon">🎓</div>
+            <div>
+              <h2>Education</h2>
+              <p>Your highest qualification</p>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Degree / Qualification</label>
+              <input type="text" id="eduDegree" placeholder="e.g. B.Tech in Computer Science" />
+            </div>
+            <div class="field">
+              <label>College / University</label>
+              <input type="text" id="eduCollege" placeholder="e.g. IIT Bombay" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Year of Graduation</label>
+              <input type="text" id="eduYear" placeholder="e.g. 2022" />
+            </div>
+            <div class="field">
+              <label>CGPA / Percentage (optional)</label>
+              <input type="text" id="eduGrade" placeholder="e.g. 8.5 CGPA or 85%" />
+            </div>
+          </div>
+        </div>
+
+        <!-- SKILLS -->
+        <div class="form-card">
+          <div class="card-header">
+            <div class="card-icon">⚡</div>
+            <div>
+              <h2>Skills</h2>
+              <p>Technical and soft skills relevant to your target role</p>
+            </div>
+          </div>
+          <div class="field" id="field-skills">
+            <label>Skills <span class="req">*</span></label>
+            <textarea id="skills" class="textarea-sm" placeholder="e.g. JavaScript, React, Node.js, Python, SQL, Git, Agile, Communication, Team Leadership"></textarea>
+            <span class="hint">Separate with commas. Include both technical and soft skills.</span>
+            <span class="error-msg">Please enter at least a few skills</span>
+          </div>
+        </div>
+
+        <!-- WORK EXPERIENCE -->
+        <div class="form-card">
+          <div class="card-header">
+            <div class="card-icon">💼</div>
+            <div>
+              <h2>Work Experience</h2>
+              <p>List your most recent roles first</p>
+            </div>
+          </div>
+          <div id="expContainer"></div>
+          <button type="button" class="add-item-btn" onclick="addExperience()">+ Add Experience</button>
+        </div>
+
+        <!-- PROJECTS -->
+        <div class="form-card">
+          <div class="card-header">
+            <div class="card-icon">🚀</div>
+            <div>
+              <h2>Projects</h2>
+              <p>Key projects that showcase your skills</p>
+            </div>
+          </div>
+          <div id="projContainer"></div>
+          <button type="button" class="add-item-btn" onclick="addProject()">+ Add Project</button>
+        </div>
+
+        <!-- CERTIFICATIONS -->
+        <div class="form-card">
+          <div class="card-header">
+            <div class="card-icon">🏆</div>
+            <div>
+              <h2>Certifications</h2>
+              <p>Professional certifications and courses</p>
+            </div>
+          </div>
+          <div class="field">
+            <label>Certifications</label>
+            <textarea id="certifications" class="textarea-sm" placeholder="e.g. AWS Certified Developer (2023), Google Analytics Certified, Meta Front-End Developer Certificate"></textarea>
+            <span class="hint">List certifications separated by commas or new lines</span>
+          </div>
+        </div>
+
+        <!-- SUBMIT -->
+        <div class="submit-area">
+          <button type="button" class="btn-generate" id="generateBtn" onclick="generateResume()">
+            <span class="btn-text">✦ Generate My Resume</span>
+            <div class="spinner"></div>
+          </button>
+          <p class="submit-hint">AI will craft a professional, ATS-optimized resume from your details</p>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== OUTPUT PAGE ==================== -->
+  <div class="page" id="output-page">
+    <nav class="output-nav">
+      <div class="output-nav-left">
+        <div class="output-nav-logo">Resumix</div>
+        <div id="outputTemplateBadge"></div>
+      </div>
+      <div class="output-actions">
+        <button class="btn-edit" onclick="showPage('form-page')">✏️ Edit</button>
+        <button class="btn-download" onclick="downloadPDF()">⬇️ Download PDF</button>
+
+        <!-- SHARE -->
+        <div class="share-wrap" id="shareWrap">
+          <button class="btn-share" onclick="toggleShareMenu(event)">🚀 Share</button>
+          <div class="share-dropdown" id="shareDropdown">
+            <div class="share-dropdown-title">Share Your Resume</div>
+            <button class="share-option" onclick="shareToWhatsApp()">
+              <div class="share-option-icon share-icon-whatsapp">📱</div>
+              <div class="share-option-text">
+                <div class="share-option-name">WhatsApp</div>
+                <div class="share-option-sub">Send via WhatsApp</div>
+              </div>
+              <div class="share-option-arrow">›</div>
+            </button>
+            <button class="share-option" onclick="shareToInstagram()">
+              <div class="share-option-icon share-icon-instagram">📸</div>
+              <div class="share-option-text">
+                <div class="share-option-name">Instagram</div>
+                <div class="share-option-sub">Copy caption + open app</div>
+              </div>
+              <div class="share-option-arrow">›</div>
+            </button>
+            <button class="share-option" onclick="shareToLinkedIn()">
+              <div class="share-option-icon share-icon-linkedin">💼</div>
+              <div class="share-option-text">
+                <div class="share-option-name">LinkedIn</div>
+                <div class="share-option-sub">Share achievement post</div>
+              </div>
+              <div class="share-option-arrow">›</div>
+            </button>
+            <button class="share-option" onclick="shareToTwitter()">
+              <div class="share-option-icon share-icon-twitter">🐦</div>
+              <div class="share-option-text">
+                <div class="share-option-name">Twitter / X</div>
+                <div class="share-option-sub">Tweet your win</div>
+              </div>
+              <div class="share-option-arrow">›</div>
+            </button>
+            <button class="share-option" onclick="copyShareLink()">
+              <div class="share-option-icon share-icon-copy">🔗</div>
+              <div class="share-option-text">
+                <div class="share-option-name">Copy Message</div>
+                <div class="share-option-sub">Copy text to clipboard</div>
+              </div>
+              <div class="share-option-arrow">›</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="output-container">
+      <div class="output-header">
+        <div class="ats-badge">✓ ATS-Optimized Resume</div>
+        <h2>Your Resume is Ready!</h2>
+        <p>Review your AI-generated resume below. Click "Edit" to make changes.</p>
+      </div>
+      <div id="resume-doc"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
